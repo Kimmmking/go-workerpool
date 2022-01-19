@@ -1,1 +1,1 @@
-# go-workpool
+# go-workerpool
