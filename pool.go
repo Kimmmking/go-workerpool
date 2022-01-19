@@ -22,7 +22,7 @@ type Pool struct {
 type Task func()
 
 const (
-	defaultCapacity = 100
+	defaultCapacity = 10
 	maxCapacity     = 10000
 )
 
@@ -36,7 +36,7 @@ func New(capacity int, opts ...Option) *Pool {
 	if capacity <= 0 {
 		capacity = defaultCapacity
 	}
-	if capacity > 0 {
+	if capacity > maxCapacity {
 		capacity = maxCapacity
 	}
 
@@ -45,6 +45,8 @@ func New(capacity int, opts ...Option) *Pool {
 		tasks:    make(chan Task),
 		active:   make(chan struct{}, capacity),
 		quit:     make(chan struct{}),
+		preAlloc: false,
+		block:    true,
 	}
 	for _, opt := range opts {
 		opt(p)
